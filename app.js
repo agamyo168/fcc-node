@@ -1,28 +1,22 @@
-const { readFile, writeFile } = require("fs");
+const http = require("http");
 
-readFile("./content/first.txt", "utf8", (err, result) => {
-  if (err) {
-    console.log(err);
+console.log("Creating server");
+const server = http.createServer((req, res) => {
+  const { url, method } = req;
+  if (url === "/") {
+    res.end("Welcome to our home page!");
+    return;
+    // res.write("Welcome to our home page!");
+    // res.end();
+  }
+  if (req.url === "/about") {
+    res.end("Here is our short history");
     return;
   }
-  const first = result;
-  //Nasty nesting code
-  readFile("./content/second.txt", "utf8", (err, result) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    const second = result;
-    writeFile(
-      "./content/result.txt",
-      `Write these files\n${first}\n${second}`,
-      (err, result) => {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        console.log(result);
-      }
-    );
-  });
+  //a route that doesn't exist
+  res.end(`<h1>Oops!</h1>
+    <p>We can't seem to find the page you are looking for</p>
+    <a href="/">back to home page</a>`);
 });
+console.log("Starting Server!");
+server.listen(5000);
