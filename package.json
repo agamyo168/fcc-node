@@ -1,0 +1,29 @@
+{
+  "name": "node_basics",
+  "version": "1.0.0",
+  "description": "Tutorial on node basics with examples and comments",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agamyo168/fcc-node.git"
+  },
+  "keywords": [
+    "git",
+    "node",
+    "express",
+    "backend",
+    "javascript"
+  ],
+  "author": "jackal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/agamyo168/fcc-node/issues"
+  },
+  "homepage": "https://github.com/agamyo168/fcc-node#readme",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}

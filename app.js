@@ -1,22 +1,12 @@
-const http = require("http");
+//package.json - manifest file (stores important info about project/package)
+//manual approach -> create package.json in the root, create properties etc.
+// npm init (step by step, press enter to skip)
+// npm init -y (everything default)
 
-console.log("Creating server");
-const server = http.createServer((req, res) => {
-  const { url, method } = req;
-  if (url === "/") {
-    res.end("Welcome to our home page!");
-    return;
-    // res.write("Welcome to our home page!");
-    // res.end();
-  }
-  if (req.url === "/about") {
-    res.end("Here is our short history");
-    return;
-  }
-  //a route that doesn't exist
-  res.end(`<h1>Oops!</h1>
-    <p>We can't seem to find the page you are looking for</p>
-    <a href="/">back to home page</a>`);
-});
-console.log("Starting Server!");
-server.listen(5000);
+//Third-party
+const _ = require("lodash");
+
+const items = [1, [2, [3, [4]]]];
+
+const flatItems = _.flattenDeep(items);
+console.log(flatItems);
