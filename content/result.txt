@@ -1,0 +1,6 @@
+----START----
+This is the two files first.txt and second.txt each on a newline:
+Hello World!
+REEEEEEEEEEEEEEEEEEEEE
+---END---
+

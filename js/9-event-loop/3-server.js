@@ -6,5 +6,5 @@ const server = http.createServer((req, res) => {
 
 //listen is asynchronous, event-loop waits for requests.
 server.listen(5000, () => {
-  console.log("Server is listening on port 5000");
+  console.log("The server is ready my liege. PORT 5000 POGGERS?");
 });
