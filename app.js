@@ -1,19 +1,15 @@
-const { createReadStream } = require("fs");
+const http = require("http");
+const { createReadStream, readFileSync } = require("fs");
 
-// by default each chunk holds maximum `65486 bytes -- 64kb`
-// to change the chunk size -> add { highWaterMark: x bytes } flag
-// to change encoding to read something other than a buffer of bytes add encoding flag {encoding: 'utf8'}
-
-const stream = createReadStream("./content/big.txt", {
-  highWaterMark: 90000,
-  encoding: "utf8",
-});
-//subscribing to 'data' event and doing a callback with the received args.
-
-stream.on("data", (chunk) => {
-  console.log(chunk);
-});
-//Error handling
-stream.on("error", (err) => {
-  console.log(err);
-});
+const server = http
+  .createServer((req, res) => {
+    // const text = readFileSync("./content/big.txt");
+    // res.end(text);
+    const fileStream = createReadStream("./content/big.txt", "utf8");
+    fileStream.on("open", (chunk) => {
+      fileStream.pipe(res);
+    });
+  })
+  .listen(5000, () => {
+    console.log("Server started...");
+  });
