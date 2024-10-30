@@ -1,47 +1,21 @@
 const express = require("express");
 
 let { people } = require("../data");
+const {
+  getPeople,
+  createPerson,
+  updatePerson,
+  deletePerson,
+} = require("../controllers/people");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.status(200).json({ success: true, data: people });
-});
-router.post("/postman", (req, res) => {
-  //We didn't have access to json content-type because we didn't include express.json()
-  // -> this is a post request made by axios not form.
-  const { name } = req.body;
-  if (!name)
-    return res
-      .status(400)
-      .json({ success: false, msg: "please provide name value" });
-  res.status(201).json({ success: true, person: name });
-});
+// router.get("/", getPeople);
+// router.post("/postman", createPerson);
+// router.put("/:id", updatePerson);
+// router.delete("/:id", deletePerson);
 
-router.put("/:id", (req, res) => {
-  const { id } = req.params;
-  const { name } = req.body;
-  const person = people.find((person) => person.id === Number(id));
-  if (!person)
-    return res
-      .status(404)
-      .json({ success: false, msg: `no person with id:${id}` });
-  const newPeople = people.map((person) => {
-    if (person.id === Number(id)) person.name = name;
-    return person;
-  });
-  res.status(200).json({ success: true, data: newPeople });
-});
-router.delete("/:id", (req, res) => {
-  const { id } = req.params;
-  const person = people.find((person) => person.id === Number(id));
-  if (!person)
-    return res
-      .status(404)
-      .json({ success: false, msg: `no person with id:${id}` });
-  const newPeople = people.filter((person) => {
-    return person.id !== Number(id);
-  });
-  res.status(200).json({ success: true, data: newPeople });
-});
+router.route("/").get(getPeople);
+router.route("/postman").post(createPerson);
+router.route("/:id").put(updatePerson).delete(deletePerson);
 module.exports = router;
