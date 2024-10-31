@@ -6,6 +6,8 @@ const sequelize = require("./util/database");
 const errorController = require("./controllers/error");
 const Product = require("./models/product");
 const User = require("./models/user");
+const Cart = require("./models/cart");
+const CartItem = require("./models/cart-item");
 
 const app = express();
 
@@ -38,7 +40,12 @@ app.use(errorController.get404);
 //Cascade deletes product when user is deleted
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product); // a single user could create many products
+//Cart Association:
+User.hasOne(Cart);
+Cart.belongsTo(User); // This is redundant since we already wrote User.hasOne(Cart)
 
+Cart.belongsToMany(Product, { through: CartItem }); //through: the relation table
+Product.belongsToMany(Cart, { through: CartItem });
 //THIS WILL SYNC DB WITH JS-> [Creating table and columns]
 sequelize
   //   .sync({ force: true }) //We set {force: true} in Development only to drop existing tables and recreate them when setting relations
