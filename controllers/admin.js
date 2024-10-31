@@ -9,7 +9,9 @@ const getAddProduct = (req, res) => {
 };
 
 const getProducts = (req, res) => {
-  Product.findAll()
+  req.user
+    .getProducts()
+    //  Product.findAll()
     .then((products) => {
       res.render("admin/products", {
         prods: products,
@@ -21,8 +23,11 @@ const getProducts = (req, res) => {
 };
 const getEditProduct = (req, res) => {
   const { productId } = req.params;
-  Product.findByPk(productId)
-    .then((product) => {
+  req.user
+    .getProducts({ where: { id: productId } }) // This searches for a product with same user.id implicitly and productId explicitly
+    //   Product.findByPk(productId)
+    .then((products) => {
+      const product = products[0];
       res.render("admin/edit-product", {
         editing: true,
         product: product,
