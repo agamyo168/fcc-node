@@ -25,8 +25,11 @@
   },
   "homepage": "https://github.com/agamyo168/fcc-node#readme",
   "dependencies": {
+    "ejs": "^3.1.10",
     "express": "^4.21.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "mysql2": "^3.11.3",
+    "sequelize": "^6.37.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
