@@ -1,5 +1,19 @@
 const Product = require("../models/product");
 
+const getIndex = (req, res) => {
+  Product.findAll()
+    .then((products) => {
+      res.render("shop/index", {
+        prods: products,
+        pageTitle: "Shop",
+        path: "/",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 const getProducts = (req, res) => {
   Product.findAll()
     .then((products) => {
@@ -41,18 +55,22 @@ const getProduct = (req, res) => {
     })
     .catch();
 };
-const getIndex = (req, res) => {
-  Product.findAll()
+
+const getCart = (req, res) => {
+  req.user
+    .getCart()
+    .then((cart) => {
+      return cart.getProducts();
+    })
     .then((products) => {
-      res.render("shop/index", {
-        prods: products,
-        pageTitle: "Shop",
-        path: "/",
+      res.render("shop/cart", {
+        products: products,
+        path: "/cart",
+        pageTitle: "Your Cart",
       });
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch();
 };
 
-module.exports = { getIndex, getProducts, getProduct };
+const postCart = () => {};
+module.exports = { getIndex, getProducts, getProduct, getCart };

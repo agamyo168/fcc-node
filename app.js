@@ -61,9 +61,15 @@ sequelize
     return Promise.resolve(user); //You can technically just return user since then will automatically wrap it with promise.resolve
   })
   .then((user) => {
-    console.log(user);
-    app.listen(3000, () => {
-      console.log("START LISTENING ON PORT 3000...");
+    user.getCart().then((cart) => {
+      if (!cart) {
+        return user.createCart();
+      }
     });
   })
+  .then(
+    app.listen(3000, () => {
+      console.log("START LISTENING ON PORT 3000...");
+    })
+  )
   .catch((err) => console.log(err));
