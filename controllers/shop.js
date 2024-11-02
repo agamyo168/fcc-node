@@ -72,5 +72,66 @@ const getCart = (req, res) => {
     .catch();
 };
 
-const postCart = () => {};
-module.exports = { getIndex, getProducts, getProduct, getCart };
+const postCart = (req, res) => {
+  const { productId } = req.body;
+  let fetchedCart;
+  let newQuantity = 1;
+  req.user
+    .getCart()
+    .then((cart) => {
+      fetchedCart = cart;
+      return cart.getProducts({
+        where: {
+          id: productId,
+        },
+      });
+    })
+    .then((products) => {
+      let product;
+      if (products.length > 0) product = products[0];
+
+      //if the cart already has this product.
+      if (product) {
+        const oldQuantity = product.cartItem.quantity;
+        newQuantity += oldQuantity;
+        return product;
+      }
+
+      //if the cart doesn't have this product.
+      return Product.findByPk(productId);
+    })
+    .then((product) => {
+      return fetchedCart.addProduct(product, {
+        through: { quantity: newQuantity },
+      });
+    })
+    .then(() => {
+      res.redirect("/cart");
+    })
+    .catch((err) => console.log(err));
+};
+const postCartDeleteProduct = (req, res) => {
+  const { productId } = req.body;
+  req.user
+    .getCart()
+    .then((cart) => {
+      return cart.getProducts({ where: { id: productId } });
+    })
+    .then((products) => {
+      const product = products[0];
+      return product.cartItem.destroy();
+    })
+    .then((result) => {
+      console.log(result);
+      res.redirect("/cart");
+    })
+    .catch((err) => console.log(err));
+};
+module.exports = {
+  getIndex,
+  getProducts,
+  getProduct,
+  getCart,
+  postCart,
+  postCartDeleteProduct,
+};
