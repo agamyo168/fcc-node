@@ -1,3 +1,4 @@
+const Order = require("../models/order");
 const Product = require("../models/product");
 
 const getIndex = (req, res) => {
@@ -127,6 +128,55 @@ const postCartDeleteProduct = (req, res) => {
     })
     .catch((err) => console.log(err));
 };
+//Orders
+const getOrders = (req, res) => {
+  req.user
+    .getOrders({ include: ["products"] })
+    .then((orders) => {
+      return res.render("shop/orders", {
+        path: "/orders",
+        pageTitle: "Orders",
+        orders,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+const postOrder = (req, res) => {
+  let fetchedCart;
+  req.user
+    .getCart()
+    .then((cart) => {
+      fetchedCart = cart;
+      return cart.getProducts();
+    })
+    .then((products) => {
+      return req.user
+        .createOrder()
+        .then((order) => {
+          products.map((product) => {
+            order.addProduct(product, {
+              through: { quantity: product.cartItem.quantity },
+            });
+          });
+          //Maxwell's method
+          // order.addProducts(
+          //   products.map((product) => {
+          //     product.orderItem = { quantity: product.cartItem.quantity };
+          //     return product;
+          //   })
+          // );
+        })
+        .then((result) => {
+          fetchedCart.setProducts(null);
+          return res.redirect("/orders");
+        })
+        .catch((err) => console.log(err));
+    })
+
+    .catch((err) => console.log(err));
+};
 module.exports = {
   getIndex,
   getProducts,
@@ -134,4 +184,6 @@ module.exports = {
   getCart,
   postCart,
   postCartDeleteProduct,
+  postOrder,
+  getOrders,
 };
