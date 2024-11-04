@@ -1,2 +1,3 @@
 /node_modules
 /05-JWT-Basics
+.env
