@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
 
-const CustomAPIError = require("../errors/custom-error");
+const { UnauthenticatedError } = require("../errors");
 
 const auth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     //401 IS NOT AUTHENTICATED ERROR.
-    throw new CustomAPIError("No token with the request", 401);
+    throw new UnauthenticatedError("No token with the request");
   }
   const token = authHeader.split(" ")[1];
   try {
@@ -14,7 +14,7 @@ const auth = async (req, res, next) => {
     req.decoded = decoded;
     next();
   } catch (error) {
-    throw new CustomAPIError("Not Authorized", 401);
+    throw new UnauthenticatedError("Not Authorized");
   }
 };
 

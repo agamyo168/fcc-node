@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const CustomAPIError = require("../errors/custom-error");
+const { BadRequestError } = require("../errors");
 
 const login = async (req, res, next) => {
   const { username, password } = req.body;
@@ -10,7 +10,7 @@ const login = async (req, res, next) => {
   //check in the controller -- validate
   if (!username || !password) {
     // throw new CustomAPIError("invalid username or password", 400);
-    return next(new CustomAPIError("invalid username or password", 400)); //400 STANDS FOR BAD REQUEST!
+    return next(new BadRequestError("invalid username or password")); //400 STANDS FOR BAD REQUEST!
   }
   const id = new Date().getDate(); // This for demo we usually get the id from database.
   //payload is better be small for weak internet users
