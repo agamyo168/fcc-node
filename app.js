@@ -9,13 +9,14 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 const sequelize = require("./db/connect");
 const jobsRouter = require("./routes/jobs");
 const authRouter = require("./routes/auth");
+const authenticateUser = require("./middleware/authentication");
 
 app.use(express.json());
 // extra packages
 
 // routes
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/jobs", jobsRouter);
+app.use("/api/v1/jobs", authenticateUser, jobsRouter);
 
 //last stack of middlewares
 app.use(notFoundMiddleware);
