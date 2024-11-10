@@ -25,7 +25,7 @@ const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {
-    //TODO: make sure it's not { force:true }
+    //TODO: make sure it's not { force:true } this is only for development
     await sequelize.sync();
     app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
